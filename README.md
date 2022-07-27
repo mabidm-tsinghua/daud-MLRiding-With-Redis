@@ -1,4 +1,4 @@
-# mlridin
+# MLRidin
 
 > Tested for Python version 3.8.10.
 
@@ -51,7 +51,7 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-> It is recommended to first start MLRidin Sniffer process than start MLridinML process.
+> It is recommended to first start MLRidin Sniffer process then start MLridinML process.
 
 ## Starting MLRidin Sniffer
 
@@ -103,4 +103,4 @@ cd MLRidinML
 python main.py
 ```
 
-> Make sure that the Models file exist in the directory MLRidinML/models/.
+> Make sure that the Models file exist in the directory MLRidinML/models/. You can download the models from [here](https://drive.google.com/drive/folders/1lsnKWekcpcg3aNv-FMzvVL8KnlahTARi?usp=sharing).

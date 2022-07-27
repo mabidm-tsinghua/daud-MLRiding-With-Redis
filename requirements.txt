@@ -1,0 +1,7 @@
+scapy==2.4.3
+numpy==1.18
+pandas==0.25.3
+scikit-learn==1.0.2
+scipy==1.4.1
+xgboost==0.90
+redis==4.3.4

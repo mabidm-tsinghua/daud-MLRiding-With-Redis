@@ -1,0 +1,11 @@
+venv/*
+MLRidinSniffer/mlridin.log
+MLRidinML/mlridin.log
+MLRidinML/setting/__pycache__/*
+MLRidinSniffer/setting/__pycache__/*
+MLRidinSniffer/features/__pycache__/*
+MLRidinSniffer/features/context/__pycache__/*
+MLRidinML/machinelearning/__pycache__/*
+MLRidinML/models/*
+MLRidinML/__pycache__/*
+MLRidinSniffer/__pycache__/*

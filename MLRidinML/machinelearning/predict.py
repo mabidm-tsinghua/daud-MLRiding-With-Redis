@@ -20,16 +20,23 @@ from machinelearning import ClassDetail
 def getAlertLevel(probability, predicted_class):
     if(probability <= 50 or predicted_class == 'normal'):
         return 'Level 0'
-    elif (probability >= 60 and probability <= 80):
+    elif (probability > 50 and probability <= 60):
         return 'Level 1'
-    elif (probability >= 80 and probability <= 100):
+    elif (probability > 60 and probability <= 70):
+        return 'Level 2'
+    elif (probability > 70 and probability < 80):
         return 'Level 3'
+    elif (probability >= 80 and probability <= 100):
+        return 'Level 4'
 
 def predict():
 
     alert = {}
     head = ['Src IP', 'Src Port', 'Dst IP', 'Dst Port', 'Protocol', 'Timestamp', 'Flow Duration', 'Total Fwd Packet', 'Total Bwd packets', 'Total Length of Fwd Packet', 'Total Length of Bwd Packet', 'Fwd Packet Length Max', 'Fwd Packet Length Min', 'Fwd Packet Length Mean', 'Fwd Packet Length Std', 'Bwd Packet Length Max', 'Bwd Packet Length Min', 'Bwd Packet Length Mean', 'Bwd Packet Length Std', 'Flow Bytes/s', 'Flow Packets/s', 'Flow IAT Mean', 'Flow IAT Std', 'Flow IAT Max', 'Flow IAT Min', 'Fwd IAT Total', 'Fwd IAT Mean', 'Fwd IAT Std', 'Fwd IAT Max', 'Fwd IAT Min', 'Bwd IAT Total', 'Bwd IAT Mean', 'Bwd IAT Std', 'Bwd IAT Max', 'Bwd IAT Min', 'Fwd PSH Flags', 'Bwd PSH Flags', 'Fwd URG Flags', 'Bwd URG Flags', 'Fwd Header Length', 'Bwd Header Length', 'Fwd Packets/s', 'Bwd Packets/s', 'Packet Length Min', 'Packet Length Max', 'Packet Length Mean', 'Packet Length Std', 'Packet Length Variance', 'FIN Flag Count', 'SYN Flag Count', 'RST Flag Count', 'PSH Flag Count', 'ACK Flag Count', 'URG Flag Count', 'ECE Flag Count', 'Down/Up Ratio', 'Average Packet Size', 'Fwd Bytes/Bulk Avg', 'Fwd Packet/Bulk Avg', 'Fwd Bulk Rate Avg', 'Bwd Bytes/Bulk Avg', 'Bwd Packet/Bulk Avg', 'Bwd Bulk Rate Avg', 'FWD Init Win Bytes', 'Bwd Init Win Bytes', 'Fwd Act Data Pkts', 'Fwd Seg Size Min', 'Active Mean', 'Active Std', 'Active Max', 'Active Min', 'Idle Mean', 'Idle Std', 'Idle Max', 'Idle Min', 'Label']
     try:
+        f = open('alerts/alerts.json', 'w')
+        f.close()
+
         r = redis.StrictRedis(host='localhost', port=6379, db=0)
 
         # construct pubsub interface and subscribe to a channel
@@ -45,6 +52,7 @@ def predict():
                 current_batch_id = str(time.time()).replace('.','')
                 
                 df = pd.DataFrame(refine, columns=head)
+                orginal_flow = df.copy()
                 ndataset=df.drop(['Src IP','Src Port','Dst IP','Dst Port','Protocol','Timestamp'], axis=1)
                 # Removing whitespaces in column names.
                 ncol_names = [col.replace(' ', '') for col in ndataset.columns]
@@ -99,10 +107,11 @@ def predict():
                 alert['predicted_class'] = predicted_class
                 alert['predicted_class_probability'] = str(high)
                 alert['level'] = getAlertLevel(high, predicted_class)
+                alert['flow'] = orginal_flow.to_dict('records')[0]
                 now = datetime.now()
                 alert['timestamp'] = now.strftime("%d/%m/%Y %H:%M:%S")
-                print("alert is going to be saved")
-                print(json.dumps(alert))
+                # print("alert is going to be saved")
+                # print(json.dumps(alert))
                 with open('alerts/alerts.json', 'a+') as alerts:
                     alerts.write(json.dumps(alert)+'\n')
 

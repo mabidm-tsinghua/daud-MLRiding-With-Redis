@@ -112,7 +112,7 @@ def predict():
                 alert['level'] = getAlertLevel(high, predicted_class)
                 alert['flow'] = orginal_flow.to_dict('records')[0]
                 now = datetime.now()
-                alert['timestamp'] = now.strftime("%d/%m/%Y %H:%M:%S")
+                # alert['timestamp'] = now.strftime("%d/%m/%Y %H:%M:%S")
                 # print("alert is going to be saved")
                 # print(json.dumps(alert))
                 with open('alerts/alerts.json', 'a+') as alerts:

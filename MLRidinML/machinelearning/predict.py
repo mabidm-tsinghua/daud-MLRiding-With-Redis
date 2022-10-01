@@ -54,7 +54,12 @@ def predict():
                 df = pd.DataFrame(refine, columns=head)
                 rows, cols = df.shape
                 if rows == 0:
+                    print('rows are zero')
                     continue
+                
+                if rows == 0:
+                    print("this line should not be runing")
+                    
                 orginal_flow = df.copy()
                 ndataset=df.drop(['Src IP','Src Port','Dst IP','Dst Port','Protocol','Timestamp'], axis=1)
                 # Removing whitespaces in column names.
